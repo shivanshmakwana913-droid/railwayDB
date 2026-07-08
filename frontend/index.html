@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vande Bharat Express Booking Hub</title>
+
+  <!-- Web Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Toast Notification Wrapper -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Booking Cancellation Confirmation Modal -->
+  <div id="confirmModalOverlay" class="modal-overlay">
+    <div class="confirm-modal">
+      <div class="modal-logo">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3 class="modal-title">Cancel Boarding Pass?</h3>
+      <p class="modal-msg">Are you sure you want to cancel this ticket? This will delete the booking record permanently
+        from the database and free up the seat.</p>
+      <div class="modal-actions">
+        <button id="btnCancelDismiss" class="btn-modal secondary">No, Keep It</button>
+        <button id="btnCancelConfirm" class="btn-modal danger">Yes, Cancel Ticket</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-container">
+
+    <!-- Main Top Branding Layout Header -->
+    <header>
+      <div class="brand-wrapper">
+        <span class="pulsate-dot"></span>
+        <span class="brand-text">IRCTC Elite Next-Gen Booking</span>
+      </div>
+      <h1 class="logo-main">Vande Bharat Hub</h1>
+      <p class="tagline">Indian Railways ultra-glorified instant ticketing portal. Experience glassmorphism, instant
+        booking generation, and live booking tracking.</p>
+    </header>
+
+    <!-- Main Grid Dashboard layout -->
+    <div class="dashboard-grid">
+
+      <!-- Left Console: Booking Form -->
+      <section class="glass-panel">
+        <div class="panel-title-wrapper">
+          <i class="fa-solid fa-ticket"></i>
+          <h2 class="panel-title">Express Booking Console</h2>
+        </div>
+
+        <form id="bookingForm" autocomplete="off">
+
+          <!-- Name & Age side by side -->
+          <div class="form-group-row split-name-age">
+            <div class="input-container">
+              <label class="input-label" for="name">Passenger Name</label>
+              <div class="input-wrapper">
+                <input type="text" id="name" class="form-input" placeholder="e.g. Shivansh Makwana" required
+                  minlength="3" />
+                <i class="fa-solid fa-user"></i>
+              </div>
+            </div>
+
+            <div class="input-container">
+              <label class="input-label" for="age">Age</label>
+              <div class="input-wrapper">
+                <input type="number" id="age" class="form-input" placeholder="42" required min="5" max="120" />
+                <i class="fa-solid fa-circle-info"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Source & Destination Stations with Swap Button -->
+          <div class="station-route-grid">
+            <div class="input-container">
+              <label class="input-label" for="source">Source Station</label>
+              <div class="input-wrapper">
+                <input type="text" id="source" class="form-input" placeholder="e.g. New Delhi (NDLS)" required />
+                <i class="fa-solid fa-train-subway"></i>
+              </div>
+            </div>
+
+            <div class="swap-btn-container">
+              <button type="button" id="btnSwapStations" class="btn-swap" title="Swap Stations">
+                <i class="fa-solid fa-arrows-left-right"></i>
+              </button>
+            </div>
+
+            <div class="input-container">
+              <label class="input-label" for="destination">Destination Station</label>
+              <div class="input-wrapper">
+                <input type="text" id="destination" class="form-input" placeholder="e.g. Mumbai Central (MMCT)"
+                  required />
+                <i class="fa-solid fa-train-subway"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Date & Choose Train selection -->
+          <div class="form-group-row split-2">
+            <div class="input-container">
+              <label class="input-label" for="date">Journey Date</label>
+              <div class="input-wrapper">
+                <input type="date" id="date" class="form-input" required />
+                <i class="fa-solid fa-calendar-days"></i>
+              </div>
+            </div>
+
+            <div class="input-container">
+              <label class="input-label" for="train">Train & Number</label>
+              <div class="input-wrapper train-select-wrapper">
+                <select id="train" class="form-input" required style="padding-right: 2.5rem;">
+                  <optgroup label="Vande Bharat Fleet">
+                    <option value="22436 - NDLS Varanasi Vande Bharat">22436 - Varanasi Vande Bharat</option>
+                    <option value="20901 - MMCT Gandhinagar Vande Bharat">20901 - Gandhinagar Vande Bharat</option>
+                    <option value="22448 - NDLS Amb Andaura Vande Bharat">22448 - Amb Andaura Vande Bharat</option>
+                  </optgroup>
+                  <optgroup label="Premium Shatabdi / Rajdhani Express">
+                    <option value="12002 - New Delhi Bhopal Shatabdi" selected>12002 - NDLS Bhopal Shatabdi</option>
+                    <option value="12424 - NDLS Dibrugarh Rajdhani">12424 - NDLS Dibrugarh Rajdhani</option>
+                    <option value="12952 - Mumbai Central Rajdhani">12952 - MMCT Rajdhani Express</option>
+                    <option value="12260 - Sealdah Duronto Express">12260 - Sealdah Duronto Express</option>
+                  </optgroup>
+                  <optgroup label="Famous Superfast Express">
+                    <option value="12626 - Kerala SF Express">12626 - Kerala SF Express</option>
+                    <option value="12841 - Coromandel Express">12841 - Coromandel Express</option>
+                    <option value="12925 - Paschim Express">12925 - Paschim Express</option>
+                  </optgroup>
+                </select>
+                <i class="fa-solid fa-train"></i>
+                <i class="fa-solid fa-chevron-down" style="left: auto; right: 1.25rem;"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn-submit-booking">
+            <span>Book Boarding Pass</span>
+            <i class="fa-solid fa-ticket-simple"></i>
+          </button>
+        </form>
+      </section>
+
+      <!-- Right Console: Stats Overview & Live Bookings Board -->
+      <section class="bookings-section">
+
+        <!-- Live statistics widgets bar -->
+        <div class="stats-header-bar">
+          <div class="stat-chip">
+            <div class="stat-icon-wrapper cyan">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Total Booked</span>
+              <span id="statTotal" class="stat-value">--</span>
+            </div>
+          </div>
+
+          <div class="stat-chip">
+            <div class="stat-icon-wrapper orange">
+              <i class="fa-solid fa-server"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">System Node</span>
+              <span id="statStatus" class="stat-value" style="font-size: 0.9rem; color: var(--accent-green);">ON TIME
+                (5k)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-panel" style="flex-grow: 1; display: flex; flex-direction: column;">
+
+          <div class="panel-title-wrapper"
+            style="justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <i class="fa-solid fa-paste"></i>
+              <h2 class="panel-title">Departures Board</h2>
+            </div>
+            <span id="liveCounterLabel"
+              style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700; text-transform: uppercase;">PAGE
+              1</span>
+          </div>
+
+          <!-- Filtering System Board -->
+          <div class="filter-container">
+            <div class="input-wrapper">
+              <input type="text" id="filterSource" class="form-input" placeholder="Search Source"
+                style="padding: 0.6rem 1rem 0.6rem 2.2rem; font-size: 0.85rem;" />
+              <i class="fa-solid fa-magnifying-glass" style="font-size: 0.85rem; left: 0.8rem;"></i>
+            </div>
+
+            <div class="input-wrapper">
+              <input type="text" id="filterDestination" class="form-input" placeholder="Search Dest."
+                style="padding: 0.6rem 1rem 0.6rem 2.2rem; font-size: 0.85rem;" />
+              <i class="fa-solid fa-magnifying-glass" style="font-size: 0.85rem; left: 0.8rem;"></i>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+              <button id="btnSearchFilter" class="btn-search">
+                <i class="fa-solid fa-filter"></i>
+                <span>Filter</span>
+              </button>
+              <button id="btnClearFilter" class="btn-clear" style="display: none;">Clear</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Booked Boarding Pass Tickets -->
+          <div id="bookings" class="tickets-list-wrapper" style="margin-top: 1.5rem; flex-grow: 1;">
+            <!-- Rendered Boarding passes go here -->
+          </div>
+
+          <!-- Bottom Pagination Controls -->
+          <div class="pagination-container" id="paginationWrapper" style="display: none;">
+            <button id="btnPagePrev" class="btn-page">
+              <i class="fa-solid fa-angle-left"></i>
+              <span>Prev</span>
+            </button>
+            <span id="pageIndicator" class="page-indicator">Page 1</span>
+            <button id="btnPageNext" class="btn-page">
+              <span>Next</span>
+              <i class="fa-solid fa-angle-right"></i>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
